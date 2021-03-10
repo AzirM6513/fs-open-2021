@@ -1,0 +1,26 @@
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+server->browser: HTML-code
+
+note over browser:
+execute HTML file
+requests main.css
+requests main.js
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server->browser: main.css
+browser->server: HTPP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server->browser: main.js
+
+note over browser:
+executes javascript code
+requests data.json
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server->browser: JSON content
+
+note over browser:
+browser executes the event handler
+renders notes for display
+end note

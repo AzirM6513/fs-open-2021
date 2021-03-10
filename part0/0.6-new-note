@@ -1,0 +1,7 @@
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over browser:
+sends text in submit box as json object
+spa.js event "XMLHttpRequest" is triggered
+handler saves note to array and re-draws all notes in array to page using jsx
+note is sent to server as json object
+end note

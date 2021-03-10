@@ -1,0 +1,24 @@
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+
+note over browser:
+request CSS
+request JS
+end note
+
+server->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server->browser: CSS-code
+browser->server: HTPP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+server->browser: JS-code
+
+note over browser:
+execute spa.js
+request data.json
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server->browser: JSON-object
+
+note over browser:
+parse JSON data from object and stores to array then displays to page with jsx
+end note
