@@ -11,22 +11,43 @@ const App = () => {
   ];
 
   const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState([0, 0, 0, 0, 0, 0]);
 
   const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max));
 
+  const updateVotes = () => {
+    const newVotes = [...votes];
+    newVotes[selected]++;
+    setVotes(newVotes);
+  };
+  const findLargestVote = () => votes.indexOf(Math.max(...votes));
+
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
+      <Header text="Anecdote of the day" />
+      <Anecdote anecdotes={anecdotes} value={selected} />
+      <Statistics votes={votes} value={selected} />
+      <Button handleClick={() => updateVotes()} text="vote" />
       <Button
         handleClick={() => setSelected(getRandomInt(anecdotes.length - 1) + 1)}
         text="next anecdote"
       />
+
+      <Header text="Anecdote with most votes" />
+      <Anecdote anecdotes={anecdotes} value={findLargestVote()} />
+      <Statistics votes={votes} value={findLargestVote()} />
     </div>
   );
 };
 
+const Header = ({ text }) => <h1>{text}</h1>;
+
 const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>{text}</button>
 );
+
+const Anecdote = ({ anecdotes, value }) => <p>{anecdotes[value]}</p>;
+
+const Statistics = ({ votes, value }) => <p>has {votes[value]} votes</p>;
 
 export default App;
