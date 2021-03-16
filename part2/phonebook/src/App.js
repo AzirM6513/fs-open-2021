@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: "Arto Hellas", number: "040-123456" },
@@ -31,8 +35,10 @@ const App = () => {
 
     setPersons(persons.concat(personObject));
     setNewName("");
+    setNewNumber("");
   };
 
+  // util functions
   const personExists = (personObject) => {
     const personArray = persons.map((person) => person.name);
     return personArray.includes(personObject.name);
@@ -42,6 +48,7 @@ const App = () => {
     return !(personObject.name && personObject.number);
   };
 
+  // event listeners
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
@@ -58,32 +65,24 @@ const App = () => {
     person.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  const personFormData = {
+    addPerson,
+    newName,
+    handleNameChange,
+    newNumber,
+    handleNumberChange,
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with <input value={search} onChange={handleSearchChange} />
-      </div>
+      <Filter search={search} handleSearchChange={handleSearchChange} />
+
       <h2>add new contact information</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm data={personFormData} />
+
       <h2>Numbers</h2>
-      <ul>
-        {filteredPersons.map((person) => (
-          <li key={person.name}>
-            {person.name} {person.number}
-          </li>
-        ))}
-      </ul>
+      <Persons persons={filteredPersons} />
     </div>
   );
 };
