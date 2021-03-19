@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import personService from "./services/persons";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456" },
-    { name: "Ada Lovelace", number: "39-44-5323523" },
-    { name: "Dan Abramov", number: "12-43-234345" },
-    { name: "Mary Poppendieck", number: "39-23-6423122" },
-  ]);
-
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    personService.getAll().then((initalPersons) => {
+      setPersons(initalPersons);
+    });
+  }, []);
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -33,12 +34,13 @@ const App = () => {
       return;
     }
 
-    setPersons(persons.concat(personObject));
-    setNewName("");
-    setNewNumber("");
+    personService.create(personObject).then((returnedPerson) => {
+      setPersons(persons.concat(personObject));
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
-  // util functions
   const personExists = (personObject) => {
     const personArray = persons.map((person) => person.name);
     return personArray.includes(personObject.name);
@@ -48,7 +50,6 @@ const App = () => {
     return !(personObject.name && personObject.number);
   };
 
-  // event listeners
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
