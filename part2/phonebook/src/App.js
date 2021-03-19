@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 import Filter from "./components/Filter";
@@ -10,6 +11,15 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
+
+  const personExists = (personObject) => {
+    const personArray = persons.map((person) => person.name);
+    return personArray.includes(personObject.name);
+  };
+
+  const valueEmpty = (personObject) => {
+    return !(personObject.name && personObject.number);
+  };
 
   useEffect(() => {
     personService.getAll().then((initalPersons) => {
@@ -35,19 +45,18 @@ const App = () => {
     }
 
     personService.create(personObject).then((returnedPerson) => {
-      setPersons(persons.concat(personObject));
+      setPersons(persons.concat(returnedPerson));
       setNewName("");
       setNewNumber("");
     });
   };
 
-  const personExists = (personObject) => {
-    const personArray = persons.map((person) => person.name);
-    return personArray.includes(personObject.name);
-  };
+  const deletePerson = (id) => {
+    personService.deleteObject(id);
 
-  const valueEmpty = (personObject) => {
-    return !(personObject.name && personObject.number);
+    personService.getAll().then((updatedPersons) => {
+      setPersons(updatedPersons);
+    });
   };
 
   const handleNameChange = (event) => {
@@ -83,7 +92,7 @@ const App = () => {
       <PersonForm data={personFormData} />
 
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} deletePerson={deletePerson} />
     </div>
   );
 };
