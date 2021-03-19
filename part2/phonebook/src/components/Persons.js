@@ -7,7 +7,7 @@ const Persons = ({ persons, deletePerson }) => (
       <Person
         key={person.name}
         person={person}
-        deletePerson={() => deletePerson(person.id)}
+        deletePerson={() => deletePerson(person)}
       />
     ))}
   </ul>

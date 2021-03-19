@@ -51,12 +51,14 @@ const App = () => {
     });
   };
 
-  const deletePerson = (id) => {
-    personService.deleteObject(id);
+  const deletePerson = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService.deleteObject(person.id);
 
-    personService.getAll().then((updatedPersons) => {
-      setPersons(updatedPersons);
-    });
+      personService.getAll().then((updatedPersons) => {
+        setPersons(updatedPersons);
+      });
+    }
   };
 
   const handleNameChange = (event) => {
