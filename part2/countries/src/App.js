@@ -5,7 +5,7 @@ import axios from "axios";
 function App() {
   const [countries, setCountries] = useState([]);
   const [weather, setWeather] = useState({});
-  const [findWeather, setFindWeather] = useState("");
+  const [findWeather, setFindWeather] = useState("new%20york");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -14,15 +14,16 @@ function App() {
     });
   }, []);
 
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&query=${findWeather}`
-  //     )
-  //     .then((response) => {
-  //       setWeather(response.data);
-  //     });
-  // }, [findWeather]);
+  useEffect(() => {
+    axios
+      .get(
+        `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}f0&query=${findWeather}`
+      )
+      .then((response) => {
+        setWeather(response.data);
+        console.log(response.data);
+      });
+  }, [findWeather]);
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);

@@ -13,6 +13,8 @@ const Country = ({ countries, dataObject }) => {
 
   if (countries.length === 1) {
     const country = countries[0];
+    const capital = country.capital.replace(" ", "%20");
+    dataObject.setFindWeather(capital);
 
     return (
       <div>

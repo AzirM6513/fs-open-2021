@@ -1,20 +1,23 @@
 import React from "react";
 
 const Weather = ({ weatherObject }) => {
-  console.log(weatherObject);
   return (
     <div>
       <p>
         <strong>temperature: </strong>
-        {weatherObject.temperature} Celsius
+        {weatherObject.current.temperature} Celsius
       </p>
       <img
-        src={weatherObject.weather_icons}
-        alt={weatherObject.descriptions + ` in ${weatherObject.name}`}
+        src={weatherObject.current.weather_icons[0]}
+        alt={
+          weatherObject.current.descriptions +
+          ` in ${weatherObject.location.name}`
+        }
       />
       <p>
         <strong>wind: </strong>
-        {weatherObject.wind_speed} mph direction {weatherObject.wind_dir}
+        {weatherObject.current.wind_speed} mph direction{" "}
+        {weatherObject.current.wind_dir}
       </p>
     </div>
   );
