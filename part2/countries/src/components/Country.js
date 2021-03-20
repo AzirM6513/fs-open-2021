@@ -37,7 +37,12 @@ const Country = ({ countries, dataObject }) => {
           handleSearchChange={dataObject.handleSearchChange}
         />
         {countries.map((country) => (
-          <p key={country.name}>{country.name} </p>
+          <div key={country.name}>
+            <p>{country.name} </p>
+            <button onClick={() => dataObject.findCountry(country.name)}>
+              show
+            </button>
+          </div>
         ))}
       </div>
     );

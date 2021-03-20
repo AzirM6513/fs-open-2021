@@ -14,15 +14,15 @@ function App() {
     });
   }, []);
 
-  useEffect(() => {
-    axios
-      .get(
-        `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&query=${findWeather}`
-      )
-      .then((response) => {
-        setWeather(response.data);
-      });
-  }, [findWeather]);
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&query=${findWeather}`
+  //     )
+  //     .then((response) => {
+  //       setWeather(response.data);
+  //     });
+  // }, [findWeather]);
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
@@ -32,11 +32,16 @@ function App() {
     country.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  const findCountry = (country) => {
+    setSearch(country);
+  };
+
   const dataObject = {
     search,
     handleSearchChange,
     weather,
     setFindWeather,
+    findCountry,
   };
 
   return (

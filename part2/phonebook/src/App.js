@@ -13,8 +13,8 @@ const App = () => {
   const [search, setSearch] = useState("");
 
   const personExists = (personObject) => {
-    const personArray = persons.map((person) => person.name);
-    return personArray.includes(personObject.name);
+    const personArray = persons.map((person) => person.name.toLowerCase());
+    return personArray.includes(personObject.name.toLowerCase());
   };
 
   const valueEmpty = (personObject) => {
@@ -40,7 +40,7 @@ const App = () => {
     }
 
     if (personExists(personObject)) {
-      alert(`${personObject.name} was already added to phonebook`);
+      alert(`${personObject.name} already exists in phonebook`);
       return;
     }
 
