@@ -17,11 +17,10 @@ function App() {
   useEffect(() => {
     axios
       .get(
-        `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}f0&query=${findWeather}`
+        `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&query=${findWeather}`
       )
       .then((response) => {
         setWeather(response.data);
-        console.log(response.data);
       });
   }, [findWeather]);
 
