@@ -1,16 +1,20 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
+
+import personService from "./services/persons";
 
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import personService from "./services/persons";
+import Notification from "./components/Notification";
+import ErrorNotification from "./components/ErrorNotification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
+  const [message, setMessage] = useState(null);
+  const [error, setError] = useState(null);
 
   const personExists = (personObject) => {
     const personArray = persons.map((person) => person.name.toLowerCase());
@@ -48,12 +52,24 @@ const App = () => {
       setPersons(persons.concat(returnedPerson));
       setNewName("");
       setNewNumber("");
+
+      setMessage(`Added ${personObject.name}`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
     });
   };
 
   const deletePerson = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
-      personService.deleteObject(person.id);
+      personService.deleteObject(person.id).catch(() => {
+        setError(
+          `Information of ${person.name} has already been removed from server`
+        );
+        setTimeout(() => {
+          setError(null);
+        }, 5000);
+      });
 
       personService.getAll().then((updatedPersons) => {
         setPersons(updatedPersons);
@@ -88,6 +104,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
+      <ErrorNotification message={error} />
       <Filter search={search} handleSearchChange={handleSearchChange} />
 
       <h2>add new contact information</h2>
