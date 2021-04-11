@@ -25,9 +25,29 @@ const App = () => {
     return !(personObject.name && personObject.number);
   };
 
+  const findId = (personObject) => {
+    for (let i = 0; i < persons.length; i++) {
+      if (persons[i].name.toLowerCase() === personObject.name.toLowerCase()) {
+        return persons[i].id;
+      }
+    }
+  };
+
+  const resetInput = () => {
+    setNewName("");
+    setNewNumber("");
+  };
+
+  const sendMessage = (msg) => {
+    setMessage(msg);
+    setTimeout(() => {
+      setMessage(null);
+    }, 5000);
+  };
+
   useEffect(() => {
-    personService.getAll().then((initalPersons) => {
-      setPersons(initalPersons);
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
     });
   }, []);
 
@@ -44,23 +64,35 @@ const App = () => {
     }
 
     if (personExists(personObject)) {
-      alert(`${personObject.name} already exists in phonebook`);
+      const id = findId(personObject);
+
+      personService.update(id, personObject);
+      resetInput();
+      sendMessage(`Updated ${personObject.name}`);
+
+      personService.getAll().then((updatedPersons) => {
+        setPersons(updatedPersons);
+      });
       return;
     }
 
-    personService.create(personObject).then((returnedPerson) => {
-      setPersons(persons.concat(returnedPerson));
-      setNewName("");
-      setNewNumber("");
-
-      setMessage(`Added ${personObject.name}`);
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-    });
+    personService
+      .create(personObject)
+      .then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        resetInput();
+        sendMessage(`Added ${personObject.name}`);
+      })
+      .catch((error) => {
+        setError(`${error.response.data.error}`);
+        setTimeout(() => {
+          setError(null);
+        }, 5000);
+      });
   };
 
   const deletePerson = (person) => {
+    console.log(person);
     if (window.confirm(`Delete ${person.name}?`)) {
       personService.deleteObject(person.id).catch(() => {
         setError(
